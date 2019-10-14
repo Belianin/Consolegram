@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Db.Logging.Abstractions;
 using TeleSharp.TL;
 using TLSharp.Core;
@@ -17,38 +18,28 @@ namespace Consolegram
 
         private readonly ILog log;
 
-        private TLUser user;
-
         public TLSharpTelegramApi(int apiId, string apiHash, ILog log)
         {
             this.apiId = apiId;
             this.apiHash = apiHash;
             this.log = log;
-            sessionStore = new FileSessionStore();
+            
+            sessionStore = new FileSessionStore(new DirectoryInfo("session/"));
         }
 
-        public void Auth(string session)
+        public IAuthResult Auth(string session)
         {
             log.Info("Establishing TCP connection...");
             client = new TelegramClient(apiId, apiHash, sessionStore, session, null);
             log.Info("Authenticating Consolegram...");
             client.ConnectAsync().Wait();
-            if (!client.IsUserAuthorized())
-            {
-                log.Info("Sending code...");
-                var hash = client.SendCodeRequestAsync(session).Result;
-                var code = GetCode();
-                log.Info($"Received code {code}.");
-                log.Info("Authenticating user...");
-                user = client.MakeAuthAsync(session, hash, code).Result;
-            }
-            else
-            {
-                log.Info("User already authorized.");
-                user = sessionStore.Load(session).TLUser;
-            }
+
+            if (client.IsUserAuthorized()) 
+                return new TLAuthResult();
             
-            log.Info("Done.");
+            log.Info("Sending code...");
+            var hash = client.SendCodeRequestAsync(session).Result;
+            return new TLAuthResult(client, hash, session);
         }
 
         private string GetCode()

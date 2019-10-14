@@ -4,6 +4,6 @@ namespace Consolegram
 {
     public interface ITelegramApi : IDisposable
     {
-        void Auth(string phone);
+        IAuthResult Auth(string phone);
     }
 }

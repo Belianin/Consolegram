@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Db.Logging.Abstractions;
 
@@ -31,7 +32,7 @@ namespace Consolegram
             Bye();
         }
 
-        public void Stop()
+        private void Stop()
         {
             mainCts.Cancel();
             api.Dispose();
@@ -42,17 +43,41 @@ namespace Consolegram
             Console.WriteLine(input);
         }
 
+        private void LogIn()
+        {
+            Console.WriteLine("Enter phone:");
+            var phone = GetValue(@"^ *\+?\d{11} *$", "Enter valid phone number").Trim();
+            var result = api.Auth(phone);
+            
+            if (result.IsAuthorized)
+                return;
+
+            Console.WriteLine("Enter code:");
+            var code = GetValue(@".*", "Enter code:");
+            result.EnterCode(code);
+        }
+
         private static IEnumerable<string> ReadInput(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
                 yield return Console.ReadLine();
         }
 
-        private void LogIn()
+        private string GetValue(string regex, string message)
         {
-            Console.WriteLine("Enter phone");
-            var input = Console.ReadLine();
-            api.Auth(input);
+            var cts = new CancellationTokenSource();
+            foreach (var input in ReadInput(cts.Token))
+            {
+                if (Regex.IsMatch(input, regex))
+                {
+                    cts.Cancel();
+                    return input;
+                }
+                
+                Console.WriteLine(message);
+            }
+
+            return null;
         }
 
         private static void Greet()
