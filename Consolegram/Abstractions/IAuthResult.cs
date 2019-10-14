@@ -1,4 +1,4 @@
-namespace Consolegram
+namespace Consolegram.Abstractions
 {
     public interface IAuthResult
     {

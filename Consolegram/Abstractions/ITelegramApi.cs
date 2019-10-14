@@ -1,6 +1,6 @@
 using System;
 
-namespace Consolegram
+namespace Consolegram.Abstractions
 {
     public interface ITelegramApi : IDisposable
     {

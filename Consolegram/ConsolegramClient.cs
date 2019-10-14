@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Consolegram.Abstractions;
 using Db.Logging.Abstractions;
 
 namespace Consolegram

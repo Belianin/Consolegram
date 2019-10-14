@@ -1,7 +1,8 @@
 using System;
+using Consolegram.Abstractions;
 using TLSharp.Core;
 
-namespace Consolegram
+namespace Consolegram.TLSharp
 {
     internal class TLAuthResult : IAuthResult
     {

@@ -1,10 +1,10 @@
 using System;
 using System.IO;
+using Consolegram.Abstractions;
 using Db.Logging.Abstractions;
-using TeleSharp.TL;
 using TLSharp.Core;
 
-namespace Consolegram
+namespace Consolegram.TLSharp
 {
     public class TLSharpTelegramApi : ITelegramApi
     {
