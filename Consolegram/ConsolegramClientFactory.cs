@@ -4,11 +4,12 @@ namespace Consolegram
 {
     public static class ConsolegramClientFactory
     {
-        public static ConsolegramClient New()
+        public static ConsolegramClient New(int apiId, string apiHash)
         {
             var log = new ConsoleLog();
-            
-            return new ConsolegramClient(log);
+            var api = new TLSharpTelegramApi(apiId, apiHash, log);
+        
+            return new ConsolegramClient(api, log);
         }
     }
 }

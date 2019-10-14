@@ -7,14 +7,15 @@ namespace Consolegram
 {
     public class ConsolegramClient
     {
-        private ITelegramApi api;
+        private readonly ITelegramApi api;
 
         private readonly ILog log;
 
         private readonly CancellationTokenSource mainCts;
 
-        public ConsolegramClient(ILog log)
+        public ConsolegramClient(ITelegramApi api, ILog log)
         {
+            this.api = api;
             this.log = log;
             mainCts = new CancellationTokenSource();
         }
@@ -49,16 +50,9 @@ namespace Consolegram
 
         private void LogIn()
         {
-            var cts = new CancellationTokenSource();
-            foreach (var input in ReadInput(cts.Token))
-            {
-                if (input == "stop")
-                {
-                    Console.WriteLine("Loggined in");
-                    cts.Cancel();
-                    break;
-                }
-            }
+            Console.WriteLine("Enter phone");
+            var input = Console.ReadLine();
+            api.Auth(input);
         }
 
         private static void Greet()
