@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="TLSharp" Version="0.1.0.421" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Db.Logging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\Db\Db.Metrics\bin\Release\netstandard2.0\Db.Logging.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
